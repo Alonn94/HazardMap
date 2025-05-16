@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
+import "./Login.css";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -21,7 +22,7 @@ const Login = () => {
       if (res.ok && data.token) {
         localStorage.setItem("token", data.token);
         alert("Login successful!");
-        navigate("/dashboard"); // You can redirect anywhere you want
+        navigate("/dashboard");
       } else {
         alert(data.error || "Login failed");
       }
@@ -32,25 +33,30 @@ const Login = () => {
   };
 
   return (
-    <div>
-      <h2>Login</h2>
-      <form onSubmit={handleLogin}>
-        <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        /><br />
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        /><br />
-        <button type="submit">Log In</button>
-      </form>
+    <div className="login-wrapper">
+      <div className="login-box">
+        <h2 className="login-title">Login</h2>
+        <form onSubmit={handleLogin} className="login-form">
+          <input
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+          <input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+          <button type="submit">Log In</button>
+        </form>
+        <p className="login-footer">
+          Don’t have an account? <Link to="/Signup">Sign up here</Link>
+        </p>
+      </div>
     </div>
   );
 };

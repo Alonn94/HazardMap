@@ -1,0 +1,211 @@
+/* Layout */
+.dashboard-wrapper {
+    display: flex;
+    height: 100vh;
+    overflow: hidden;
+    font-family: Arial, sans-serif;
+  }
+  
+  .dashboard-left {
+    width: 40%;
+    padding: 1rem;
+    box-sizing: border-box;
+    overflow-y: auto;
+    background-color: #f9f9f9;
+    border-right: 1px solid #ddd;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .dashboard-map {
+    width: 60%;
+    height: 100vh;
+    position: relative;
+  }
+  
+  .map-container {
+    height: 100%;
+    width: 100%;
+  }
+  
+  /* Header */
+  .dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .dashboard-header h2 {
+    font-size: 1.4rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+    color: #333;
+  }
+  
+  /* Itinerary Section */
+  .itinerary-section {
+    margin: 1rem 0;
+    padding: 0.75rem;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+  }
+  
+  .itinerary-section h4 {
+    margin-top: 0;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #444;
+  }
+  
+  .itinerary-section input,
+  .itinerary-section select,
+  .itinerary-section button {
+    display: block;
+    width: 100%;
+    margin-bottom: 0.5rem;
+    padding: 0.45rem;
+    font-size: 0.95rem;
+    border-radius: 4px;
+    box-sizing: border-box;
+  }
+  
+  .itinerary-section input,
+  .itinerary-section select {
+    border: 1px solid #ccc;
+    background-color: #fff;
+    transition: border 0.3s;
+  }
+  
+  .itinerary-section input:focus,
+  .itinerary-section select:focus {
+    border-color: #4caf50;
+    outline: none;
+  }
+  
+  .itinerary-section button {
+    background-color: #4caf50;
+    color: white;
+    font-weight: 500;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.25s;
+  }
+  
+  .itinerary-section button:hover {
+    background-color: #45a049;
+  }
+  
+  /* Hazard List */
+  .hazard-list {
+    margin-top: 1rem;
+    list-style: none;
+    padding: 0;
+  }
+  
+  .hazard-item {
+    background: #fff;
+    border: 1px solid #ddd;
+    padding: 0.7rem;
+    margin-bottom: 0.6rem;
+    border-radius: 6px;
+    font-size: 0.88rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    line-height: 1.4;
+  }
+  
+  button.active-vote {
+    background-color: #4caf50;
+    color: white;
+    font-weight: bold;
+    border: 2px solid #388e3c;
+    border-radius: 5px;
+  }
+  
+  /* Saved Routes */
+  .saved-routes-list li {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 0.6rem 0.8rem;
+    background: #f4f4f4;
+    border-radius: 6px;
+    margin-bottom: 0.6rem;
+    cursor: pointer;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+  
+  .saved-routes-list li span {
+    font-size: 0.92rem;
+    line-height: 1.4;
+    color: #333;
+    width: 100%;
+  }
+  
+  .saved-routes-list li .route-delete-btn {
+    align-self: flex-end;
+    margin-top: 0.2rem;
+    background: none;
+    border: none;
+    color: crimson;
+    font-size: 1.1rem;
+    cursor: pointer;
+    padding: 0.2rem 0.3rem;
+    transition: color 0.2s;
+  }
+  
+  .saved-routes-list li .route-delete-btn:hover {
+    color: darkred;
+  }
+  
+  /* Comment Styling */
+  .comment-block {
+    margin-top: 0.5rem;
+    padding: 0.5rem;
+    background-color: #f1f1f1;
+    border-radius: 6px;
+  }
+  
+  .comment-item {
+    display: flex;
+    align-items: flex-start;
+    background: #fff;
+    border-radius: 6px;
+    padding: 0.4rem 0.6rem;
+    margin-bottom: 0.4rem;
+    font-size: 0.85rem;
+    border: 1px solid #ddd;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+  }
+  
+  .comment-icon {
+    margin-right: 0.5rem;
+    color: #555;
+  }
+  
+  .comment-text {
+    flex: 1;
+    word-break: break-word;
+  }
+  
+  /* Responsive */
+  @media (max-width: 768px) {
+    .dashboard-wrapper {
+      flex-direction: column;
+    }
+  
+    .dashboard-left,
+    .dashboard-map {
+      width: 100%;
+      height: auto;
+    }
+  }
+  .delete-comment-button {
+    background: none;
+    border: none;
+    color: crimson;
+    font-size: 1rem;
+    margin-left: 0.5rem;
+    cursor: pointer;
+  }
