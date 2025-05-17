@@ -113,6 +113,7 @@ const Dashboard = () => {
             method: 'PATCH',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
         body: JSON.stringify({ voteType }),
+        credentials: 'include',
       });
       const data = await res.json();
       if (res.ok) {
@@ -438,8 +439,7 @@ const handleSelectRoute = async (e) => {
           if (!confirmDelete) return;
 
           try {
-            const res = await fetch(`/api/comments/${c.id}`, {
-              method: 'DELETE',
+            const res = await fetch(`${BASE_URL}/api/comments/${c.id}`, {              method: 'DELETE',
               headers: {
                 Authorization: `Bearer ${token}`,
               },
