@@ -6,13 +6,15 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 5051;
 // ✅ CORS middleware first
-app.use(cors({
+const corsOptions ={
     origin: ['http://localhost:5173', 'https://hazard-map-client.onrender.com'],
     methods: ['GET', 'POST', 'PATCH', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true
-  }));
-  app.options('*', cors());
+  };
+
+  app.use(cors(corsOptions));
+  app.options('*', cors(corsOptions));
 
 // ✅ JSON parsing
 app.use(express.json());
