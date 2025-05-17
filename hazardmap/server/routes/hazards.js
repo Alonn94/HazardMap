@@ -92,40 +92,43 @@ router.get('/', async (req, res) => {
   });
 
   router.patch('/:id/vote', requireAuth, async (req, res) => {
-    const {id:hazard_id} = req.params;
-    const {voteType} = req.body
+    res.set('Access-Control-Allow-Origin', req.headers.origin);
+    res.set('Access-Control-Allow-Credentials', 'true');
+  
+    const { id: hazard_id } = req.params;
+    const { voteType } = req.body;
     const user_id = req.user.id;
-
-    if (!["relevant","not_relevant"].includes(voteType)){
-        return res.status(400).json({error: "Invalid vote type"});
+  
+    if (!["relevant", "not_relevant"].includes(voteType)) {
+      return res.status(400).json({ error: "Invalid vote type" });
     }
+  
     try {
-        const existingVote = await db("votes")
-        .where({user_id:user_id, hazard_id})
+      const existingVote = await db("votes")
+        .where({ user_id: user_id, hazard_id })
         .first();
-
-        if(existingVote) {
-            return res.status(403).json({error: "You have already voted on this hazard"});
-        }
-
-        await db('votes').insert({
-            user_id,
-            hazard_id,
-            type: voteType
-        });
-
-        const column = voteType === "relevant" ? "relevant_votes" : "not_relevant_votes";
-        const [updated] = await db("hazards")
-        .where({id:hazard_id})
+  
+      if (existingVote) {
+        return res.status(403).json({ error: "You have already voted on this hazard" });
+      }
+  
+      await db('votes').insert({
+        user_id,
+        hazard_id,
+        type: voteType
+      });
+  
+      const column = voteType === "relevant" ? "relevant_votes" : "not_relevant_votes";
+      const [updated] = await db("hazards")
+        .where({ id: hazard_id })
         .increment(column, 1)
         .returning("*");
-
-        res.json(updated);
+  
+      res.json(updated);
     } catch (error) {
-        console.error("Vote error:", error.message);
-        res.status(500).json({error: "Failed to update vote"});
+      console.error("Vote error:", error.message);
+      res.status(500).json({ error: "Failed to update vote" });
     }
-
   });
 
 
