@@ -92,9 +92,6 @@ router.get('/', async (req, res) => {
   });
 
   router.patch('/:id/vote', requireAuth, async (req, res) => {
-    res.set('Access-Control-Allow-Origin', req.headers.origin);
-    res.set('Access-Control-Allow-Credentials', 'true');
-  
     const { id: hazard_id } = req.params;
     const { voteType } = req.body;
     const user_id = req.user.id;
@@ -105,7 +102,7 @@ router.get('/', async (req, res) => {
   
     try {
       const existingVote = await db("votes")
-        .where({ user_id: user_id, hazard_id })
+        .where({ user_id, hazard_id })
         .first();
   
       if (existingVote) {
@@ -130,7 +127,6 @@ router.get('/', async (req, res) => {
       res.status(500).json({ error: "Failed to update vote" });
     }
   });
-
 
   // GET /api/hazards/:id - Get hazard by ID
 router.get('/:id', async (req, res) => {
