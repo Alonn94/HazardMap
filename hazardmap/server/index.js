@@ -9,8 +9,8 @@ const PORT = process.env.PORT || 5051;
 // ✅ Define and reuse these CORS options
 const corsOptions = {
   origin: ['http://localhost:5173', 'https://hazard-map-client.onrender.com'],
-  methods: ['GET', 'POST', 'PATCH', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
+allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true,
 };
 
