@@ -4,7 +4,17 @@ import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import markerIcon from 'leaflet/dist/images/marker-icon.png';
 import markerShadow from 'leaflet/dist/images/marker-shadow.png';
+import markerIcon2x from 'leaflet/dist/images/marker-icon-2x.png';
+
 import '../styles/pulsingMarker.css';
+
+delete L.Icon.Default.prototype._getIconUrl;
+
+L.Icon.Default.mergeOptions({
+  iconRetinaUrl: markerIcon2x,
+  iconUrl: markerIcon,
+  shadowUrl: markerShadow,
+});
 
 
 // ✅ Custom icons for start and end points
@@ -59,6 +69,7 @@ const center = [32.073, 34.781];
     });
     return null;
   };
+
 
   return (
 <MapContainer center={center} zoom={13} className="map-container" scrollWheelZoom={true}>      <TileLayer
