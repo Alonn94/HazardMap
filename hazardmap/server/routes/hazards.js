@@ -81,15 +81,6 @@ router.get('/', async (req, res) => {
     }
   });
 
-  router.options('/:id/vote', (req, res) => {
-    res.set({
-      'Access-Control-Allow-Origin': req.headers.origin,
-      'Access-Control-Allow-Methods': 'PATCH, GET, POST, OPTIONS, DELETE',
-      'Access-Control-Allow-Headers': 'Content-Type, Authorization',
-      'Access-Control-Allow-Credentials': 'true',
-    });
-    res.sendStatus(204);
-  });
 
   router.patch('/:id/vote', requireAuth, async (req, res) => {
     const { id: hazard_id } = req.params;
