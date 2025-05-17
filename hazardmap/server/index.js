@@ -5,32 +5,28 @@ const dotenv = require('dotenv');
 dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 5051;
-// ✅ CORS middleware first
-const corsOptions ={
-    origin: ['http://localhost:5173', 'https://hazard-map-client.onrender.com'],
-    methods: ['GET', 'POST', 'PATCH', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
-    credentials: true
-  };
 
-  app.use(cors(corsOptions));
-  app.options('*', cors(corsOptions));
+// ✅ Define and reuse these CORS options
+const corsOptions = {
+  origin: ['http://localhost:5173', 'https://hazard-map-client.onrender.com'],
+  methods: ['GET', 'POST', 'PATCH', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true,
+};
 
-// ✅ JSON parsing
+// ✅ Apply to all requests
+app.use(cors(corsOptions));
+app.options('*', cors(corsOptions)); // VERY IMPORTANT for preflight
+
+// ✅ Parse JSON
 app.use(express.json());
 
-// ✅ Mount routes after middleware
-const hazardRoutes = require('./routes/hazards');
-const authRoutes = require('./routes/auth');
-const commentsRoutes = require('./routes/comments');
-const savedRoutes = require('./routes/savedRoutes');
-
-
-app.use('/api/hazards', hazardRoutes);
-app.use('/api/auth', authRoutes);
-app.use('/api/comments', commentsRoutes);
+// ✅ Serve routes
+app.use('/api/hazards', require('./routes/hazards'));
+app.use('/api/auth', require('./routes/auth'));
+app.use('/api/comments', require('./routes/comments'));
+app.use('/api/routes', require('./routes/savedRoutes'));
 app.use('/uploads', express.static('uploads'));
-app.use('/api/routes', savedRoutes);
 
 app.get("/", (req, res) => {
   res.send("Welcome to the Hazard Map API");
