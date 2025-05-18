@@ -108,10 +108,16 @@ router.get('/', async (req, res) => {
   
       const column = voteType === "relevant" ? "relevant_votes" : "not_relevant_votes";
       const [updated] = await db("hazards")
+      //increase relevant or not_relevant votes
         .where({ id: hazard_id })
         .increment(column, 1)
         .returning("*");
-  
+        //check if relevant has reached 5 votes, then delete
+
+        if (voteType === "not_relevant" && updated.not_relevant_votes >= 5) {
+            await db ("hazards").where ({id: hazard_id}).del();
+            return res.json({removed:true,message:"Hazard has been resolved by 5 votes and was removed"});
+        }
       res.json(updated);
     } catch (error) {
       console.error("Vote error:", error.message);

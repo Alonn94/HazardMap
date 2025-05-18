@@ -117,6 +117,12 @@ const Dashboard = () => {
       });
       const data = await res.json();
       if (res.ok) {
+        if (data.message?.includes("Hazard has been resolved by 5 votes and was removed")) {
+            alert("This hazard received 5 votes and was removed");
+            setHazards((prev) => prev.filter((h) => h.id !== id));
+            return;
+        }
+
         const resComments = await fetch(`${BASE_URL}/api/comments/hazard/${id}`);
         const comments = resComments.ok ? await resComments.json() : [];
         setHazards(hazards.map((h) => (h.id === id ? { ...data, comments, showAllComments: h.showAllComments || false } : h)));
@@ -423,8 +429,8 @@ const handleSelectRoute = async (e) => {
   <p>Type: {hazard.type} || Severity: {hazard.severity}</p>
   {/* <p>📍 {hazard.latitude}, {hazard.longitude}</p> */}
   <p>✅ {hazard.relevant_votes} | ❌ {hazard.not_relevant_votes}</p>
-  <button onClick={() => handleVote(hazard.id, 'relevant')} className={hazard.user_vote === "relevant" ? "active-vote":""}>Relevant</button>
-  <button onClick={() => handleVote(hazard.id, 'not_relevant')}className={hazard.user_vote === "not_relevant" ? "active-vote":""}>RESOLVE</button>
+  <button onClick={() => handleVote(hazard.id, 'relevant')} className={hazard.user_vote === "relevant" ? "active-vote":""}>STILL PRESENT</button>
+  <button onClick={() => handleVote(hazard.id, 'not_relevant')}className={hazard.user_vote === "not_relevant" ? "active-vote":""}>RESOLVED</button>
 
   <div className="comment-block">
   {(hazard.comments || []).slice(hazard.showAllComments ? 0 : -3).map((c, i) => (
