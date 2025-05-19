@@ -17,7 +17,7 @@ L.Icon.Default.mergeOptions({
 });
 
 
-// ✅ Custom icons for start and end points
+// Custom icons for start and end points
 const startIcon = L.icon({
     iconUrl: 'https://maps.google.com/mapfiles/ms/icons/green-dot.png',
     iconSize: [32, 32],
@@ -93,6 +93,13 @@ const center = [32.073, 34.781];
                 <p><strong>Severity:</strong> {hazard.severity}</p>
                 <p><em>{new Date(hazard.created_at).toLocaleString()}</em></p>
                 {isOnRoute && <p style={{ color: 'red', fontWeight: 'bold' }}>⚠ On Your Route</p>}
+                {hazard.image && (
+      <img
+        src={`${import.meta.env.VITE_API_BASE_URL}/uploads/${hazard.image}`}
+        alt="Hazard"
+        style={{ width: '100%', maxWidth: '200px', marginTop: '0.5rem', borderRadius: '6px' }}
+      />
+    )}
               </div>
             </Popup>
           </Marker>

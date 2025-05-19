@@ -321,7 +321,9 @@ const handleSelectRoute = async (e) => {
   }, [startPoint, endPoint]);
 
 
-  const filteredHazards = hazards.filter((h) => {
+  const sourceList = routeHazards.length > 0 ? routeHazards : hazards;
+
+  const filteredHazards = sourceList.filter((h) => {
     const matchType = filterType ? h.type === filterType : true;
     const matchSeverity = filterSeverity ? h.severity === filterSeverity : true;
     const matchOwner = showOnlyMine ? h.user_id === userId : true;
@@ -397,7 +399,11 @@ const handleSelectRoute = async (e) => {
 )}
     
           <button onClick={computeHazardsAlongRoute}>Find Hazards</button>
-
+          {routeHazards.length > 0 && (
+  <button onClick={() => setRouteHazards([])}>
+    Show All Hazards
+  </button>
+)}
           <label>
             Filter by Type:
             <select value={filterType} onChange={(e) => setFilterType(e.target.value)}>
