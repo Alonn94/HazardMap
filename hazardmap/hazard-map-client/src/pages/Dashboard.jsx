@@ -434,7 +434,7 @@ const handleSelectRoute = async (e) => {
   <p>{hazard.description}</p>
   <p>Type: {hazard.type} || Severity: {hazard.severity}</p>
   {/* <p>📍 {hazard.latitude}, {hazard.longitude}</p> */}
-  <p>✅ {hazard.relevant_votes} | ❌ {hazard.not_relevant_votes}</p>
+  <p>🚧⛔{hazard.relevant_votes} | ✅  {hazard.not_relevant_votes}</p>
   <button onClick={() => handleVote(hazard.id, 'relevant')} className={hazard.user_vote === "relevant" ? "active-vote":""}>STILL PRESENT</button>
   <button onClick={() => handleVote(hazard.id, 'not_relevant')}className={hazard.user_vote === "not_relevant" ? "active-vote":""}>RESOLVED</button>
 
