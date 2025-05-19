@@ -6,6 +6,6 @@ exports.up = function(knex) {
   
   exports.down = function(knex) {
     return knex.schema.table('comments', function(table) {
-      table.text('text').notNullable(); // just in case you rollback
+      table.text('text').notNullable(); 
     });
   };

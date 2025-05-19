@@ -7,6 +7,19 @@ import axios from 'axios';
 import * as turf from '@turf/turf';
 import './Dashboard.css';
 
+
+const reverseGeocode = async ([lon, lat]) => {
+  try {
+    const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`);
+    const data = await res.json();
+    return data.display_name || `${lat}, ${lon}`;
+  } catch (error) {
+    console.error('Reverse geocoding failed:', error);
+    return `${lat}, ${lon}`;
+  }
+};
+
+
 const Dashboard = () => {
     const BASE_URL = import.meta.env.VITE_API_BASE_URL;
   const [hazards, setHazards] = useState([]);
@@ -538,11 +551,15 @@ const handleSelectRoute = async (e) => {
           routeLine={routeLine}
           startPoint={startPoint}
           endPoint={endPoint}
-          onMapClick={(coords) => {
+          onMapClick={async (coords) => {
             if (selectionMode === 'start') {
+              const address = await reverseGeocode([coords.longitude, coords.latitude]);
               setStartPoint([coords.longitude, coords.latitude]);
+              setStartAddress(address);
             } else if (selectionMode === 'end') {
+              const address = await reverseGeocode([coords.longitude, coords.latitude]);
               setEndPoint([coords.longitude, coords.latitude]);
+              setEndAddress(address);
             } else {
               setNewLocation(coords);
               setIsModalOpen(true);
