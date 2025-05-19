@@ -31,12 +31,14 @@ const startIcon = L.icon({
   });
   
 
-const HazardMap = ({
+  const HazardMap = ({
     hazards = [],
     routeHazards = [],
     routeLine = [],
     startPoint,
     endPoint,
+    startFullAddress,
+    endFullAddress,
     onMapClick
   }) => {
 
@@ -107,13 +109,13 @@ const center = [32.073, 34.781];
       })}
 {startPoint && (
   <Marker position={[startPoint[1], startPoint[0]]} icon={startIcon}>
-    <Popup>Start Point</Popup>
+    <Popup>{startFullAddress}</Popup>
   </Marker>
 )}
 
 {endPoint && (
   <Marker position={[endPoint[1], endPoint[0]]} icon={endIcon}>
-    <Popup>End Point</Popup>
+    <Popup>{endFullAddress}</Popup>
   </Marker>
 )}
 

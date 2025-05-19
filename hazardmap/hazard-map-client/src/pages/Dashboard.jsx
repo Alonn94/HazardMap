@@ -8,21 +8,39 @@ import * as turf from '@turf/turf';
 import './Dashboard.css';
 
 
-const reverseGeocode = async ([lon, lat]) => {
+const reverseGeocode = async ([lng, lat]) => {
   try {
-    const res = await fetch(
-      `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`
+    const response = await fetch(
+      `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`
     );
-    const data = await res.json();
-    const { address } = data;
+    const data = await response.json();
 
-    return `${address.road || ''}, ${address.city || address.town || address.village || ''}`;
-  } catch (err) {
-    console.error("Reverse geocoding failed:", err);
-    return "Unknown location";
+    const {
+      house_number,
+      road,
+      neighbourhood,
+      city,
+      town,
+      village,
+      state,
+      country
+    } = data.address;
+
+    const placeName = [house_number, road || neighbourhood].filter(Boolean).join(' ');
+    const locality = city || town || village || state;
+    const countryName = country;
+
+    const shortAddress = [placeName, locality, countryName].filter(Boolean).join(', ');
+
+    return {
+      full: data.display_name,             //  marker popups
+      short: shortAddress || data.display_name //  UI inputs
+    };
+  } catch (error) {
+    console.error('Reverse geocoding error:', error);
+    return { full: 'Unknown location', short: 'Unknown location' };
   }
 };
-
 
 const Dashboard = () => {
     const BASE_URL = import.meta.env.VITE_API_BASE_URL;
@@ -44,6 +62,8 @@ const Dashboard = () => {
   const [endAddress, setEndAddress] = useState('');
   const [savedRoutes, setSavedRoutes] = useState([]);
   const [showSavedRoutes, setShowSavedRoutes] = useState(false);
+  const [startFullAddress, setStartFullAddress] = useState('');
+const [endFullAddress, setEndFullAddress] = useState('');
 
   const token = localStorage.getItem('token');
   const decoded = token ? jwtDecode(token) : null;
@@ -152,6 +172,9 @@ const Dashboard = () => {
   };
 
   const handleSaveRoute = async () => {
+    if (!startPoint || !endPoint || !startAddress || !endAddress) {
+      return alert('Start and end points with addresses must be set!');
+    }
     try {
         const res = await fetch(`${BASE_URL}/api/routes`, {
             method: 'POST',
@@ -549,27 +572,33 @@ const handleSelectRoute = async (e) => {
       </div>
 
       <div className="dashboard-map">
-        <HazardMap
-          hazards={filteredHazards}
-          routeHazards={routeHazards}
-          routeLine={routeLine}
-          startPoint={startPoint}
-          endPoint={endPoint}
-          onMapClick={async (coords) => {
-            if (selectionMode === 'start') {
-              const address = await reverseGeocode([coords.longitude, coords.latitude]);
-              setStartPoint([coords.longitude, coords.latitude]);
-              setStartAddress(address);
-            } else if (selectionMode === 'end') {
-              const address = await reverseGeocode([coords.longitude, coords.latitude]);
-              setEndPoint([coords.longitude, coords.latitude]);
-              setEndAddress(address);
-            } else {
-              setNewLocation(coords);
-              setIsModalOpen(true);
-            }
-            setSelectionMode(null);
-          }}
+      <HazardMap
+  hazards={filteredHazards}
+  routeHazards={routeHazards}
+  routeLine={routeLine}
+  startPoint={startPoint}
+  endPoint={endPoint}
+  startFullAddress={startFullAddress}
+  endFullAddress={endFullAddress}
+  onMapClick={async (coords) => {
+    const { longitude, latitude } = coords;
+  
+    if (selectionMode === 'start') {
+      const address = await reverseGeocode([longitude, latitude]);
+      setStartPoint([longitude, latitude]);
+      setStartAddress(address.short);          
+      setStartFullAddress(address.full);       
+    } else if (selectionMode === 'end') {
+      const address = await reverseGeocode([longitude, latitude]);
+      setEndPoint([longitude, latitude]);
+      setEndAddress(address.short);
+      setEndFullAddress(address.full);
+    } else {
+      setNewLocation(coords);
+      setIsModalOpen(true);
+    }
+    setSelectionMode(null);
+  }}
         />
       </div>
 
