@@ -10,12 +10,16 @@ import './Dashboard.css';
 
 const reverseGeocode = async ([lon, lat]) => {
   try {
-    const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`);
+    const res = await fetch(
+      `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`
+    );
     const data = await res.json();
-    return data.display_name || `${lat}, ${lon}`;
-  } catch (error) {
-    console.error('Reverse geocoding failed:', error);
-    return `${lat}, ${lon}`;
+    const { address } = data;
+
+    return `${address.road || ''}, ${address.city || address.town || address.village || ''}`;
+  } catch (err) {
+    console.error("Reverse geocoding failed:", err);
+    return "Unknown location";
   }
 };
 
